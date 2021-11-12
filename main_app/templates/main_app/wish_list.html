@@ -1,20 +1,26 @@
-<a href="{% url 'wish_list' %}">Home</a>
-<a href="{% url 'wish_create' %}">New Item</a>
-{% for wish in wish_list %}
-    <table>
-        <thead>
-            <th>Item</th>
-        </thead>
-        <tbody>
-            <td>{{wish.item}}</td>
-            <td>
-                <form method="POST" action="{% url 'wish_delete' wish.id %}">
-                    {% csrf_token %}
-                    <input type="submit" value="X">
-                </form>
-            </td>
+{% extends 'base.html' %}
+
+{% block content %}
+<table>
+    <thead>
+        <th>Item</th>
+        <th>Delete</th>
+    </thead>
+    <tbody>
+            {% for wish in wish_list %}
+            <tr>
+                <td>{{wish.item}}</td>
+                <td class='delete'>
+                    <form method="POST" action="{% url 'wish_delete' wish.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="X">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
-{% empty %}
+{% if not wish_list.count %}
     <p class='placeholder'>No item in the wishlist...</p>
-{% endfor %}
+{% endif %}
+{% endblock %}
